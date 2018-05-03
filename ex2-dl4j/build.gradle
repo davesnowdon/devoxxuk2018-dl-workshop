@@ -1,0 +1,10 @@
+apply plugin: "java"
+apply plugin: "application"
+mainClassName = "org.deeplearning4j.examples.feedforward.classification.MLPClassifierMoon"
+
+task ex2run(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = "org.deeplearning4j.examples.feedforward.classification.MLPClassifierMoon"
+}
+
+defaultTasks 'ex2run'

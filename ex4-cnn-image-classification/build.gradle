@@ -1,0 +1,16 @@
+apply plugin: "java"
+apply plugin: "application"
+mainClassName = "com.davesnowdon.devoxxuk.ImageClassifier"
+
+task train(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = "com.davesnowdon.devoxxuk.ImageClassifier"
+    args 'train'
+}
+
+task classify(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = "com.davesnowdon.devoxxuk.ImageClassifier"
+    // TODO put some filenames to run the classifier on here
+    args 'classify'
+}

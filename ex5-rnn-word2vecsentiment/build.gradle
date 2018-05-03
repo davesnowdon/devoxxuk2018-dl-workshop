@@ -1,0 +1,15 @@
+apply plugin: "java"
+apply plugin: "application"
+mainClassName = "org.deeplearning4j.examples.recurrent.word2vecsentiment.Word2VecSentimentRNN"
+
+task train(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = "org.deeplearning4j.examples.recurrent.word2vecsentiment.Word2VecSentimentRNN"
+    args 'train'
+}
+
+task analyse(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = "org.deeplearning4j.examples.recurrent.word2vecsentiment.Word2VecSentimentRNN"
+    args 'analyse'
+}

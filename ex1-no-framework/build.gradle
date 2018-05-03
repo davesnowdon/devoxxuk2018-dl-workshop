@@ -1,0 +1,10 @@
+apply plugin: "java"
+apply plugin: "application"
+mainClassName = "com.davesnowdon.devoxxuk.basics.NeuralNetClassifier"
+
+task ex1run(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = "com.davesnowdon.devoxxuk.basics.NeuralNetClassifier"
+}
+
+defaultTasks 'ex1run'
