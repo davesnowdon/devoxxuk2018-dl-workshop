@@ -27,7 +27,7 @@ import java.net.URL;
  */
 public class DataLoader {
     public static final String DATA_VAR = "DEVOXXUK_GHDDL_DATA";
-    public static final String DATA_DIR = "/home/dns/Documents/presentations/20180509-devoxx-uk-workshop/data"; // System.getenv(DATA_VAR);
+    public static final String DATA_DIR = System.getenv(DATA_VAR);
     public static final String DATA_URL = "http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz";
     public static final String EMBEDDINGS_FILE = "GoogleNews-vectors-negative300.bin.gz";
 
