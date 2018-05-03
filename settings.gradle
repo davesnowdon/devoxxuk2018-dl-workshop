@@ -10,4 +10,4 @@
 
 rootProject.name = 'devoxxuk2018-dl-workshop'
 include \
-  'ex0'
+  'ex0-setup'

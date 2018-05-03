@@ -1,0 +1,10 @@
+apply plugin: "java"
+apply plugin: "application"
+mainClassName = "com.davesnowdon.devoxxuk.DataLoader"
+
+task ex0run(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = "com.davesnowdon.devoxxuk.DataLoader"
+}
+
+defaultTasks 'ex0run'

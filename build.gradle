@@ -2,19 +2,36 @@
  * Exercises for Devoxx UK 2018 workshop "Getting your hands dirty with deep learning in java"
  */
 
-
-apply plugin: 'java'
-
-repositories {
-    jcenter()
+buildscript {
+    ext {
+        dl4j_version = "0.9.1"
+    }
+    repositories {
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+        mavenCentral()
+    }
 }
 
-// In this section you declare the dependencies for your production and test code
-dependencies {
-    // The production code uses the SLF4J logging API at compile time
-    compile 'org.slf4j:slf4j-api:1.7.25'
-
-
-    testCompile 'junit:junit:4.12'
+subprojects {
+    apply plugin: "java"
+    apply plugin: "application"
+    repositories {
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        compile "org.deeplearning4j:deeplearning4j-core:${dl4j_version}"
+        compile "org.deeplearning4j:deeplearning4j-ui_2.11:${dl4j_version}"
+        // use the following to use CPU
+        compile "org.nd4j:nd4j-native-platform:${dl4j_version}"
+        // or the following to use GPU (requires CUDA8 already installed)
+        //compile "org.nd4j:nd4j-cuda-8.0-platform:${dl4j_version}"
+        compile 'jfree:jfreechart:1.0.13'
+        //compile 'org.jfree:jcommon:1.0.13'
+        //compile 'com.oracle:javafx:2.2.3'
+        compile "org.slf4j:slf4j-simple:1.7.25"
+        compile "org.slf4j:slf4j-api:1.7.25"
+        compile 'org.apache.httpcomponents:httpclient:4.3.5'
+    }
 }
-
