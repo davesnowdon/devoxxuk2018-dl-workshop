@@ -25,3 +25,7 @@ hs_err_pid*
 devoxxuk2018-dl-workshop.iml
 out
 build
+
+.vagrant
+ex0-setup/build/tmp/
+hosts
