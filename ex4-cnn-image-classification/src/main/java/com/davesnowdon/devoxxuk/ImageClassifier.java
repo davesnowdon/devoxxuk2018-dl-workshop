@@ -67,9 +67,7 @@ public class ImageClassifier {
     private static final String LOGO_ALEX_NET_MODEL = "imageClassifierWithAlexNet_model.zip";
 
     // TODO set this to the location of your images. Each image class should be in a separate sub-folder
-    //private static final String IMAGES_BASE_DIR = "PLEASE_SET_THIS_TO_WHERE_YOU_PUT_YOUR_IMAGES";
-    private static final String IMAGES_BASE_DIR = "/home/dns/Documents/presentations/20180305-deep-learning-java/data/cnn/cropped";
-
+    private static final String IMAGES_BASE_DIR = "PLEASE_SET_THIS_TO_WHERE_YOU_PUT_YOUR_IMAGES";
 
     // TODO set the width and height to something appropriate to your dataset
     private static int height = 22;
