@@ -29,6 +29,7 @@ public class DataLoader {
     public static final String DATA_VAR = "DEVOXXUK_GHDDL_DATA";
     public static final String DATA_DIR = System.getenv(DATA_VAR);
     public static final String DATA_URL = "http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz";
+    public static final String GOOGLE_NEWS_VECTOR_ARCHIVE_URL = "https://s3.amazonaws.com/dl4j-distribution/GoogleNews-vectors-negative300.bin.gz";
     public static final String EMBEDDINGS_FILE = "GoogleNews-vectors-negative300.bin.gz";
 
 
@@ -52,12 +53,29 @@ public class DataLoader {
         System.exit(0);
     }
 
-    private static void checkEmbeddings() {
+    private static void checkEmbeddings() throws Exception {
         final File embeddingsFile = new File(DATA_DIR, EMBEDDINGS_FILE);
         if (!embeddingsFile.exists()) {
-            System.err.println("Please download the 1.5Gb file " + EMBEDDINGS_FILE + " and place in" + DATA_DIR);
-            System.exit(1);
+            System.err.println("Downloading the 1.5Gb file " + EMBEDDINGS_FILE + " and placing in" + DATA_DIR);
+            downloadGoogleNewsVectorArchive(DATA_DIR);
+        } else {
+            //Assume if archive (.tar.gz) exists, then data has already been extracted
+            System.out.println("Data (.bin.gz file) already exists at " + embeddingsFile.getAbsolutePath());
         }
+    }
+
+    private static void downloadGoogleNewsVectorArchive(final String dataDir) throws Exception {
+        //Create directory if required
+        File directory = new File(dataDir);
+        if (!directory.exists()) directory.mkdir();
+
+        //Download file:
+        String archizePath = dataDir + "GoogleNews-vectors-negative300.bin.gz";
+        File archiveFile = new File(archizePath);
+
+        System.out.println("Starting data download (1.5GB)...");
+        FileUtils.copyURLToFile(new URL(GOOGLE_NEWS_VECTOR_ARCHIVE_URL), archiveFile);
+        System.out.println("Data (.bin.gz file) downloaded to " + archiveFile.getAbsolutePath());
     }
 
     private static void downloadReviewData(final String dataDir) throws Exception {
