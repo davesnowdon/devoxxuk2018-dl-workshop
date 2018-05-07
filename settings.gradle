@@ -11,6 +11,5 @@
 rootProject.name = 'devoxxuk2018-dl-workshop'
 include \
   'ex0-setup',
-  'ex1-no-framework',
-  'ex2-dl4j'
+  'ex1-no-framework'
 
