@@ -72,6 +72,7 @@ public class Word2VecSentimentRNN {
 
     int batchSize = 64;     //Number of examples in each minibatch
     int vectorSize = 300;   //Size of the word vectors. 300 in the Google News model
+    // TODO You may want to experiment with traiing for a larger number of epochs once you've tried the network after a single epoch
     int nEpochs = 1;        //Number of epochs (full passes of training data) to train on
     int truncateReviewsToLength = 256;  //Truncate reviews with length (# words) greater than this
     final int seed = 0;     //Seed for reproducibility
@@ -142,10 +143,13 @@ public class Word2VecSentimentRNN {
                 .learningRate(2e-2)
                 .trainingWorkspaceMode(WorkspaceMode.SEPARATE).inferenceWorkspaceMode(WorkspaceMode.SEPARATE)   //https://deeplearning4j.org/workspaces
                 .list()
-                .layer(0, new GravesLSTM.Builder().nIn(vectorSize).nOut(256)
-                        .activation(Activation.TANH).build())
-                .layer(1, new RnnOutputLayer.Builder().activation(Activation.SOFTMAX)
-                        .lossFunction(LossFunctions.LossFunction.MCXENT).nIn(256).nOut(2).build())
+                .layer(0,
+                        // TODO Use GravesLSTM.Builder to create a LSTM layer with vectorSize inputs, 256 outputs and TANH activation
+                )
+                // TODO Once you've successfully trained the network you might want to experiment with adding additional layers and seeing how that changes performance
+                .layer(1,
+                        // TODO Use RnnOutputLayer.Builder with SOFTMAX activation, 256 inputs, and 2 outputs to create the output layer
+                )
                 .pretrain(false).backprop(true).build();
 
         MultiLayerNetwork net = new MultiLayerNetwork(conf);
