@@ -15,6 +15,5 @@ include \
   'ex2-dl4j',
   'ex3-cnn-cifar10',
   'ex4-cnn-image-classification',
-  'ex5-rnn-word2vecsentiment',
-  'ex6-rnn-text-generation'
+  'ex5-rnn-word2vecsentiment'
 
