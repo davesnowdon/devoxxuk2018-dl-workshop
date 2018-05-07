@@ -48,10 +48,11 @@ public class NeuralNetClassifier {
      */
     public NeuralNetClassifier(int inputWidth, int hiddenWidth, int outputWidth) {
         // initialise weights with random values (mean zero, standard deviation 1)
-        weights1 = Nd4j.randn(hiddenWidth, inputWidth);
-        bias1 = Nd4j.randn(hiddenWidth, 1);
-        weights2 = Nd4j.randn(outputWidth, hiddenWidth);
-        bias2 = Nd4j.randn(outputWidth, 1);
+        // TODO initialise weights and biases tensors
+        weights1 = null;
+        bias1 = null;
+        weights2 = null;
+        bias2 = null;
         iteration = 0;
     }
 
@@ -129,16 +130,20 @@ public class NeuralNetClassifier {
     public State forwardPropagation(INDArray input) {
         // z1 = weights1 x input + bias1
         // Hint if we are presenting multiple inputs then add() will fail as the shape will be wrong. Use addColumnVector()
-        INDArray z1 = weights1.mmul(input).addColumnVector(bias1);
+        // TODO compute the weighted sum for layer 1
+        INDArray z1 = null;
 
         // a1 = apply the ReLU activation function to z1
-        INDArray a1 = relu(z1);
+        // TODO applu the ReLU activation function to the result of the layer1 weighted sum (z1)
+        INDArray a1 = null;
 
         // z2 = weights2 x a1 + bias2
-        INDArray z2 = weights2.mmul(a1).addColumnVector(bias2);
+        // TODO use the activations from layer 1 to compute the weighted sum for layer 2
+        INDArray z2 = null;
 
         // a2 =  apply the softmax activation function to z2
-        INDArray a2 = softmax(z2);
+        // TODO apply the softmax activation function to the layer 2 weighted sum (z2)
+        INDArray a2 = null;
 
         // return output and intermediate values (which we'll use for back propagation)
         State state = new State();
@@ -178,13 +183,15 @@ public class NeuralNetClassifier {
          * dW2 = dZ2 x a1_T
          * where a1_T = transpose of a1
          */
-        INDArray dW2 = dZ2.mmul(a1.transpose()).div(m);
+        // TODO compute the partial derivative with respect to the layer 2 weights. Don't forget to normalise using the batch size m
+        INDArray dW2 = null;
 
         /*
          * Derivative with respect to layer 2 biases
          * db2 = sum of dZ2 along dimension 1
          */
-        INDArray dB2 = dZ2.sum(1).div(m);
+        // TODO compute the partial derivative for the layer 2 biases. Don't forget to normalise using the batch size m
+        INDArray dB2 = null;
 
         /*
          * Derivative with respect to layer 1 weighted sum (Z1)
@@ -192,19 +199,22 @@ public class NeuralNetClassifier {
          * where:
          * g'(z1) is the derivative of the activation function for layer 1, which equals reluDerivative(a1) in this case
          */
-        INDArray dZ1 = weights2.transpose().mmul(dZ2).mul(reluDerivative(a1));
+        // TODO now using the layer 2 weights and the derivative of the ReLU activation we can compute the partial derivative for layer 1
+        INDArray dZ1 = null;
 
         /*
          * Derivative with respect to layer 1 weights
          * dW1 = dZ1 x input_T
          */
-        INDArray dW1 = dZ1.mmul(input.transpose()).div(m);
+        // TODO compute the partial derivative for the layer 1 weights using dZ1 and the input
+        INDArray dW1 = null;
 
         /*
          * Derivative with respect to layer 1 biases
          * dB1 = sum of dZ1 along dimension 1
          */
-        INDArray dB1 = dZ1.sum(1).div(m);
+        // TODO compute the partial derivative for the layer 1 biases
+        INDArray dB1 = null;
 
         // store the computed gradients for use when we update the network's weights
         state.cache.put("dW1", dW1);
@@ -223,21 +233,18 @@ public class NeuralNetClassifier {
 
         // update each of the parameters by subtracting the gradient scaled by the learning rate
         // Hint can use subi() for in place subtraction
-        weights1.subi(dW1.mul(learningRate));
-        bias1.subi(dB1.mul(learningRate));
-        weights2.subi(dW2.mul(learningRate));
-        bias2.subi(dB2.mul(learningRate));
+        // TODO update weights1, bias1, weights2, bias2
     }
 
     /**
      * ReLU activation function
      * g(z) = max(0, z)
      * <p>
-     * Hint: Take a look at BooleanIndexing
+     * Hint: Take a look at BooleanIndexing and Conditions.lessThan
      */
     public INDArray relu(INDArray input) {
         INDArray output = input.dup();
-        BooleanIndexing.applyWhere(output, Conditions.lessThan(0), new Value(0));
+        // TODO implement ReLU
         return output;
     }
 
@@ -246,13 +253,11 @@ public class NeuralNetClassifier {
      * g'(z) = 0 if z < 0
      * = 1 if z >= 0
      * <p>
-     * Hint: Take a look at BooleanIndexing
+     * Hint: Take a look at BooleanIndexing and  Conditions.greaterThanOrEqual. You may need to do two separate operations to get the desired result
      */
     public INDArray reluDerivative(INDArray input) {
         INDArray grad = Nd4j.zeros(input.rows(), input.columns());
-        INDArray tmp = input.dup();
-        BooleanIndexing.applyWhere(tmp, Conditions.greaterThanOrEqual(0), new Value(1));
-        BooleanIndexing.assignIf(grad, tmp, Conditions.greaterThanOrEqual(1));
+        // TODO implement the derivative of ReLU
         return grad;
     }
 
@@ -262,13 +267,11 @@ public class NeuralNetClassifier {
      * For each index i of elements in z, g(z_i) = e^z_i / sum(e^z_j) for all j
      * e^z =  exp(z)
      * <p>
-     * Hint: Take a look at the Exp operator and Nd4j.getExecutioner().execAndReturn()
+     * Hint: Take a look at the Exp operator and Nd4j.getExecutioner().execAndReturn() You may also find the sumNumber() method useful
      */
     public INDArray softmax(INDArray input) {
-        INDArray exp = Nd4j.getExecutioner().execAndReturn(new Exp(input.dup()));
-        double sum = exp.sumNumber().doubleValue();
-        INDArray output = exp.div(sum);
-        return output;
+        // TODO implement softmax
+        return input.dup();
     }
 
     /*
