@@ -197,35 +197,12 @@ public class Cifar {
                 .regularization(true)
                 .l2(5 * 1e-4)
                 .list()
-                .layer(0, new ConvolutionLayer.Builder(new int[]{4, 4}, new int[]{1, 1}, new int[]{0, 0}).name("cnn1").convolutionMode(ConvolutionMode.Same)
-                        .nIn(3).nOut(64).weightInit(WeightInit.XAVIER_UNIFORM).activation(Activation.RELU)//.learningRateDecayPolicy(LearningRatePolicy.Step)
-                        .learningRate(1e-2).biasInit(1e-2).biasLearningRate(1e-2 * 2).build())
-                .layer(1, new ConvolutionLayer.Builder(new int[]{4, 4}, new int[]{1, 1}, new int[]{0, 0}).name("cnn2").convolutionMode(ConvolutionMode.Same)
-                        .nOut(64).weightInit(WeightInit.XAVIER_UNIFORM).activation(Activation.RELU)
-                        .learningRate(1e-2).biasInit(1e-2).biasLearningRate(1e-2 * 2).build())
-                .layer(2, new SubsamplingLayer.Builder(PoolingType.MAX, new int[]{2, 2}).name("maxpool2").build())
-
-                .layer(3, new ConvolutionLayer.Builder(new int[]{4, 4}, new int[]{1, 1}, new int[]{0, 0}).name("cnn3").convolutionMode(ConvolutionMode.Same)
-                        .nOut(96).weightInit(WeightInit.XAVIER_UNIFORM).activation(Activation.RELU)
-                        .learningRate(1e-2).biasInit(1e-2).biasLearningRate(1e-2 * 2).build())
-                .layer(4, new ConvolutionLayer.Builder(new int[]{4, 4}, new int[]{1, 1}, new int[]{0, 0}).name("cnn4").convolutionMode(ConvolutionMode.Same)
-                        .nOut(96).weightInit(WeightInit.XAVIER_UNIFORM).activation(Activation.RELU)
-                        .learningRate(1e-2).biasInit(1e-2).biasLearningRate(1e-2 * 2).build())
-
-                .layer(5, new ConvolutionLayer.Builder(new int[]{3, 3}, new int[]{1, 1}, new int[]{0, 0}).name("cnn5").convolutionMode(ConvolutionMode.Same)
-                        .nOut(128).weightInit(WeightInit.XAVIER_UNIFORM).activation(Activation.RELU)
-                        .learningRate(1e-2).biasInit(1e-2).biasLearningRate(1e-2 * 2).build())
-                .layer(6, new ConvolutionLayer.Builder(new int[]{3, 3}, new int[]{1, 1}, new int[]{0, 0}).name("cnn6").convolutionMode(ConvolutionMode.Same)
-                        .nOut(128).weightInit(WeightInit.XAVIER_UNIFORM).activation(Activation.RELU)
-                        .learningRate(1e-2).biasInit(1e-2).biasLearningRate(1e-2 * 2).build())
-
-                .layer(7, new ConvolutionLayer.Builder(new int[]{2, 2}, new int[]{1, 1}, new int[]{0, 0}).name("cnn7").convolutionMode(ConvolutionMode.Same)
-                        .nOut(256).weightInit(WeightInit.XAVIER_UNIFORM).activation(Activation.RELU)
-                        .learningRate(1e-2).biasInit(1e-2).biasLearningRate(1e-2 * 2).build())
-                .layer(8, new ConvolutionLayer.Builder(new int[]{2, 2}, new int[]{1, 1}, new int[]{0, 0}).name("cnn8").convolutionMode(ConvolutionMode.Same)
-                        .nOut(256).weightInit(WeightInit.XAVIER_UNIFORM).activation(Activation.RELU)
-                        .learningRate(1e-2).biasInit(1e-2).biasLearningRate(1e-2 * 2).build())
-                .layer(9, new SubsamplingLayer.Builder(PoolingType.MAX, new int[]{2, 2}).name("maxpool8").build())
+                // TODO Add 2 convolution layers with 4x4 kernals, stride of 1x1, padding of 0x0 and convolution mode "same" and 64 filters
+                // TODO Use SubsamplingLayer.Builder to create a max pooling layer with a 2x2 cell size
+                // TODO Add 2 convolution layers like the first 2 but with 96 output filters
+                // TODO Add 2 more convolution layers with a kernel size of 3x3 and 128 output filters
+                // TODO Add the final 2 convolution layers with a kernel size of 2x2 and 256 output filters
+                // TODO Add another max pooling layer with a cell size of 2x2
 
                 .layer(10, new DenseLayer.Builder().name("ffn1").nOut(1024).learningRate(1e-3).biasInit(1e-3).biasLearningRate(1e-3 * 2).build())
                 .layer(11, new DropoutLayer.Builder().name("dropout1").dropOut(0.2).build())
