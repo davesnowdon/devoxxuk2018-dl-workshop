@@ -36,7 +36,7 @@ Please complete the following steps before the workshop:
     * Linux/MacOSX:
         * `./gradlew :ex0-setup:ex0run`
     * Windows: 
-        * `gradlew.bat`
+        * `gradlew.bat :ex0-setup:ex0run`
 
 * The above `gradle` command does the following:
     * downloads java dependencies
