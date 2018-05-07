@@ -66,14 +66,13 @@ public class MLPClassifierMoon {
                 .learningRate(learningRate)
                 .updater(Updater.NESTEROVS)
                 .list()
-                .layer(0, new DenseLayer.Builder().nIn(numInputs).nOut(numHiddenNodes)
-                        .weightInit(WeightInit.XAVIER)
-                        .activation(Activation.RELU)
-                        .build())
-                .layer(1, new OutputLayer.Builder(LossFunction.NEGATIVELOGLIKELIHOOD)
-                        .weightInit(WeightInit.XAVIER)
-                        .activation(Activation.SOFTMAX)
-                        .nIn(numHiddenNodes).nOut(numOutputs).build())
+                .layer(0,
+                        // TODO Use DenseLayerBuilder to create a hidden layer with numInputs inputs and numHiddenNodes outputs
+                        // The documentation at https://deeplearning4j.org should be of assistance
+                )
+                .layer(1,
+                        // TODO Use OutputLayer.Builder to create an output layer with a SOFTMAX activation function and NEGATIVELOGLIKELIHOOD loss function with numOutputs outputs
+                )
                 .pretrain(false).backprop(true).build();
 
 
@@ -82,7 +81,7 @@ public class MLPClassifierMoon {
         model.setListeners(new ScoreIterationListener(100));    //Print score every 100 parameter updates
 
         for (int n = 0; n < nEpochs; n++) {
-            model.fit(trainIter);
+            // TODO use the fit() function to train the model for a single epoch using the training dataset iterator
         }
 
         System.out.println("Evaluate model....");
