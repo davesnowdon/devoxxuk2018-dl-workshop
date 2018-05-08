@@ -1,5 +1,6 @@
 package org.deeplearning4j.examples.recurrent.character;
 
+import org.apache.commons.io.FilenameUtils;
 import org.datavec.api.util.ClassPathResource;
 import org.deeplearning4j.nn.api.Layer;
 import org.deeplearning4j.nn.api.OptimizationAlgorithm;
@@ -12,6 +13,7 @@ import org.deeplearning4j.nn.conf.layers.RnnOutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
+import org.deeplearning4j.util.ModelSerializer;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
@@ -47,8 +49,12 @@ public class GravesLSTMCharModellingExample {
     public static final String DATA_VAR = "DEVOXXUK_GHDDL_DATA";
     public static final String DATA_DIR = System.getenv(DATA_VAR);
 
+    private static final String GENERATOR_MODEL = "GravesLSTMCharModelling_model.zip";
+
     // TODO set this to the location of a plain ASCII text file that you wish to train the network on
-    private static final String TRAINING_TEXT_FILE = "PLEASE_PUT_THE_LOCATION_OF_YOUR_TEXT_FILE_HERE";
+    //private static final String TRAINING_TEXT_FILE = "PLEASE_PUT_THE_LOCATION_OF_YOUR_TEXT_FILE_HERE";
+    private static final String TRAINING_TEXT_FILE = "/Users/dns/Documents/presentations/20180509-devoxx-uk-workshop/data/pg100.txt";
+
 
     public static void main(String[] args) throws Exception {
         if (null == DATA_DIR) {
@@ -61,6 +67,38 @@ public class GravesLSTMCharModellingExample {
             System.exit(1);
         }
 
+        GravesLSTMCharModellingExample textGenerator = new GravesLSTMCharModellingExample();
+
+        try {
+            if (args.length > 0) {
+                switch (args[0]) {
+                    case "train":
+                        textGenerator.createAndTrainModel(true);
+                        break;
+                    case "generate":
+                        textGenerator.generate();
+                        break;
+                    default:
+                        usage();
+                        break;
+                }
+            } else {
+                usage();
+                System.exit(1);
+            }
+            System.exit(0);
+        } catch (Exception e) {
+            System.err.println("Caught error: " + e.toString());
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    private static void usage() {
+        System.err.println("Usage: train|generate");
+    }
+
+    public void createAndTrainModel(boolean enableUi) throws Exception {
         int lstmLayerSize = 200;                    //Number of units in each GravesLSTM layer
         int miniBatchSize = 32;                        //Size of mini batch to use when  training
         int exampleLength = 1000;                    //Length of each training example sequence to use. This could certainly be increased
@@ -123,13 +161,7 @@ public class GravesLSTMCharModellingExample {
                 if (++miniBatchNumber % generateSamplesEveryNMinibatches == 0) {
                     System.out.println("--------------------");
                     System.out.println("Completed " + miniBatchNumber + " minibatches of size " + miniBatchSize + "x" + exampleLength + " characters");
-                    System.out.println("Sampling characters from network given initialization \"" + (generationInitialization == null ? "" : generationInitialization) + "\"");
-                    String[] samples = sampleCharactersFromNetwork(generationInitialization, net, iter, rng, nCharactersToSample, nSamplesToGenerate);
-                    for (int j = 0; j < samples.length; j++) {
-                        System.out.println("----- Sample " + j + " -----");
-                        System.out.println(samples[j]);
-                        System.out.println();
-                    }
+                    generateSamples(generationInitialization, net, iter, rng, nCharactersToSample, nSamplesToGenerate);
                 }
             }
 
@@ -137,6 +169,34 @@ public class GravesLSTMCharModellingExample {
         }
 
         System.out.println("\n\nExample complete");
+        saveModel(net, GENERATOR_MODEL);
+    }
+
+    public void generate() throws Exception {
+        int miniBatchSize = 32;                        //Size of mini batch to use when  training
+        int exampleLength = 1000;                    //Length of each training example sequence to use. This could certainly be increased
+        int tbpttLength = 50;                       //Length for truncated backpropagation through time. i.e., do parameter updates ever 50 characters
+        int numEpochs = 1;                            //Total number of training epochs
+        int generateSamplesEveryNMinibatches = 10;  //How frequently to generate samples from the network? 1000 characters / 50 tbptt length: 20 parameter updates per minibatch
+        int nSamplesToGenerate = 4;                    //Number of samples to generate after each training epoch
+        int nCharactersToSample = 300;                //Length of each sample to generate
+        String generationInitialization = null;
+        Random rng = new Random(12345);
+
+        CharacterIterator iter = getTextIterator(miniBatchSize, exampleLength);
+
+        MultiLayerNetwork net = loadModel(GENERATOR_MODEL);
+        generateSamples(generationInitialization, net, iter, rng, nCharactersToSample, nSamplesToGenerate);
+    }
+
+    private void generateSamples(String generationInitialization, MultiLayerNetwork net, CharacterIterator iter, Random rng, int nCharactersToSample, int nSamplesToGenerate) throws Exception {
+        System.out.println("Sampling characters from network given initialization \"" + (generationInitialization == null ? "" : generationInitialization) + "\"");
+        String[] samples = sampleCharactersFromNetwork(generationInitialization, net, iter, rng, nCharactersToSample, nSamplesToGenerate);
+        for (int j = 0; j < samples.length; j++) {
+            System.out.println("----- Sample " + j + " -----");
+            System.out.println(samples[j]);
+            System.out.println();
+        }
     }
 
     /**
@@ -233,5 +293,26 @@ public class GravesLSTMCharModellingExample {
         }
         //Should be extremely unlikely to happen if distribution is a valid probability distribution
         throw new IllegalArgumentException("Distribution is invalid? d=" + d + ", sum=" + sum);
+    }
+
+    public static MultiLayerNetwork saveModel(MultiLayerNetwork model, String fileName) throws Exception {
+        File locationModelFile = new File(fileName);
+        if (null != DATA_DIR) {
+            locationModelFile = new File(DATA_DIR, fileName);
+        }
+        boolean saveUpdater = false;
+        System.out.println("Saving model to " + locationModelFile);
+        ModelSerializer.writeModel(model, locationModelFile, saveUpdater);
+        System.out.println("Model saved");
+        return model;
+    }
+
+    public MultiLayerNetwork loadModel(String fileName) throws Exception {
+        File locationModelFile = new File(fileName);
+        if (null != DATA_DIR) {
+            locationModelFile = new File(DATA_DIR, fileName);
+        }
+        System.out.println("Loading model from " + locationModelFile);
+        return ModelSerializer.restoreMultiLayerNetwork(locationModelFile);
     }
 }

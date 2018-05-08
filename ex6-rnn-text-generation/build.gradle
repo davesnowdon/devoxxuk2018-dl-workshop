@@ -8,4 +8,8 @@ task train(type: JavaExec) {
     args 'train'
 }
 
-
+task generate(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = "org.deeplearning4j.examples.recurrent.character.GravesLSTMCharModellingExample"
+    args 'generate'
+}

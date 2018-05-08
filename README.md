@@ -176,6 +176,12 @@ Train the network and generate text
 * Windows: 
     * `gradlew.bat :ex6-rnn-text-generation:train`
 
+Generate text with pre-trained model
+* Linux/MacOSX:
+    * `./gradlew :ex6-rnn-text-generation:generate`
+* Windows: 
+    * `gradlew.bat :ex6-rnn-text-generation:generate`    
+
 Branches:
 * Exercise: ex6 - there is no solution branch for this exercise since only trivial changes to the code are required.
 
