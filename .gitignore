@@ -26,3 +26,6 @@ devoxxuk2018-dl-workshop.iml
 .vagrant
 ex0-setup/build/tmp/
 hosts
+
+# Don't want offline-repository to get checked into git. We want it only to allow us to create zip files on USB sticks with both code and dependencies
+/offline-repository
