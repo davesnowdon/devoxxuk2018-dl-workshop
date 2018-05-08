@@ -12,26 +12,10 @@ buildscript {
         dl4j_version = "0.9.1"
     }
     repositories {
-        maven { url offlineRepositoryRoot }
         maven { url 'https://plugins.gradle.org/m2/' }
-        mavenCentral()
-        jcenter()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }
     dependencies {
         classpath 'gradle.plugin.io.pry.gradle.offline_dependencies:gradle-offline-dependencies-plugin:0.3'
-        classpath "org.deeplearning4j:deeplearning4j-core:${dl4j_version}"
-        classpath "org.deeplearning4j:deeplearning4j-ui_2.11:${dl4j_version}"
-        // use the following to use CPU
-        classpath "org.nd4j:nd4j-native-platform:${dl4j_version}"
-        // or the following to use GPU (requires CUDA8 already installed)
-        //compile "org.nd4j:nd4j-cuda-8.0-platform:${dl4j_version}"
-        classpath 'jfree:jfreechart:1.0.13'
-        //classpath 'org.jfree:jcommon:1.0.13'
-        //classpath 'com.oracle:javafx:2.2.3'
-        classpath "org.slf4j:slf4j-simple:1.7.25"
-        classpath "org.slf4j:slf4j-api:1.7.25"
-        classpath 'org.apache.httpcomponents:httpclient:4.3.5'
     }
 }
 
@@ -48,7 +32,7 @@ offlineDependencies {
     }
 }
 
-subprojects {
+allprojects {
     apply plugin: "java"
     apply plugin: "application"
     repositories {
