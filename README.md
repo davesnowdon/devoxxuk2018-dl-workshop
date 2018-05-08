@@ -203,11 +203,26 @@ Comment the native platform dependency and uncomment the CUDA dependency to give
     compile "org.nd4j:nd4j-cuda-8.0-platform:${dl4j_version}"
 
 ## Running on an AWS EC2 instance
+
+__NOTE: This does not seem to work with current AWS deep learning AMIs that support cuda 8 & 9__
+
 You can run the code on this repo on an AWS GPU instance:
 * Select a GPU instance such as a p3.2xlarge
-* Select the following AMI "Deep Learning AMI (Ubuntu) Version 8.0 - ami-5d7c5024" this has CUDA and CUDNN pre-installed.
+* Select the following AMI "Deep Learning AMI (Ubuntu)" this has CUDA and CUDNN pre-installed.
 * You'll then want to enable the CUDA backend for ND4J, see above.
 * If you want to use the Oracle JDK you'll need to edit your PATH to remove /home/ubuntu/anaconda3/bin
+
+## Running in offline mode
+@neomatrix369 added the ability to package this repo with the depedencies and run in offline mode.
+
+Install offline plugin:
+`gradle updateOfflineRepository -PofflineRepositoryRoot=./offline-repository`
+
+Download dependencies into offline-repository: 
+`gradle updateOfflineRepository -PofflineRepositoryRoot=./offline-repository :ex0-setup:ex0run`
+
+Run task in offline mode:
+`gradle -PofflineRepositoryRoot=./offline-repository :ex0-setup:ex0run --offline`
 
 ## Thanks
 Thanks to Skymind (https://skymind.ai/) who maintain DL4J and ND4J
