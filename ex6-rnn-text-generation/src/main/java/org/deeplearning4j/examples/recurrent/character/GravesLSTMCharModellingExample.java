@@ -52,9 +52,7 @@ public class GravesLSTMCharModellingExample {
     private static final String GENERATOR_MODEL = "GravesLSTMCharModelling_model.zip";
 
     // TODO set this to the location of a plain ASCII text file that you wish to train the network on
-    //private static final String TRAINING_TEXT_FILE = "PLEASE_PUT_THE_LOCATION_OF_YOUR_TEXT_FILE_HERE";
-    private static final String TRAINING_TEXT_FILE = "/Users/dns/Documents/presentations/20180509-devoxx-uk-workshop/data/pg100.txt";
-
+    private static final String TRAINING_TEXT_FILE = "PLEASE_PUT_THE_LOCATION_OF_YOUR_TEXT_FILE_HERE";
 
     public static void main(String[] args) throws Exception {
         if (null == DATA_DIR) {
