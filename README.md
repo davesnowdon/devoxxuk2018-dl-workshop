@@ -1,9 +1,12 @@
 # Getting your hands dirty with deep learning
 This repo contains the exercises for the workshop with each exercise and solution in a separate branch.
 
-The complete set of exercises will be in the repo shortly before the workshop.
-
 Before the workshop please complete the initial exercise "EX0" which will ensure all the dependencies and large data files are present on your computer and you'll be ready for the workshop.
+
+## Presentation
+The slides can be found on slideshare: https://www.slideshare.net/DaveSnowdon1/getting-your-hands-dirty-with-deep-learning-in-java
+
+Unfortuntely slideshare does not seem to support animation so some of the slides don't look right (all the stages placed on top of one another).
 
 ## EX0 setup
 
